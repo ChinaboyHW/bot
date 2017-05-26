@@ -14,7 +14,7 @@
 // });
 
 // c.queue('http://www.amazon.com'); 
-var dal = require('./DAL');
+var models = require('../models');
 
 exports.addqueue = addqueue
 exports.exe_queue = exe_queue
@@ -32,7 +32,7 @@ var c = new Crawler({
             // $ is Cheerio by default
             //a lean implementation of core jQuery designed specifically for the server
             console.log($.text());
-            dal.insert_urlcontent($.text())
+            models.insertURLContent($.text())
                 //     const bot = Wechaty.instance()
                 //     bot.on('message',  message =>  {
                 //             })
