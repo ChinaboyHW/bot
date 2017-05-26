@@ -1,3 +1,12 @@
+exports.inster_url= inster_url
+exports.insert_urlcontent= insert_urlcontent
+exports.get_urls= get_urls
+exports.get_urlcontent= get_urlcontent
+
+
+  //  var list =get_urlcontent()
+  //   console.log(list);
+
 //var mysql  = require('mysql');  //调用MySQL模块
 const Sequelize = require('sequelize');
 
@@ -15,14 +24,14 @@ const sequelize = new Sequelize('bot', 'admin', 'Sanrenzu123', {
  // storage: 'path/to/database.sqlite'
 });
 
-// sequelize
-//   .authenticate()
-//   .then(() => {
-//     console.log('Connection has been established successfully.');
-//   })
-//   .catch(err => {
-//     console.error('Unable to connect to the database:', err);
-//   });
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Connection has been established successfully.');
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err);
+  });
 
 
 const Url= sequelize.define('urls', {
@@ -45,14 +54,27 @@ const Url= sequelize.define('urls', {
 }
 );
 
-Url.findAll().then(urls => {
-  console.log(urls)
-})
-Url.create({
-    keyword: 'Hancock',
-    url: 'urlurlurlurlurl'
+ 
+// var list =get_urls()
+//     console.log(list);
+    
+  function get_urls() {
 
+      Url.findAll().then(urls => {
+        return  urls
+    })
+  }
+
+// Url.findAll().then(urls => {
+//   console.log(urls)
+// })
+function inster_url(keyword,url) {
+  Url.create({
+    keyword: keyword,
+    url: url
   });
+}
+
 // Url.sync({force: true}).then(() => {
 //   // Table created
 //   return Url.create({
@@ -79,12 +101,13 @@ const urlcontent = sequelize.define('urlcontent', {
 }
 );
 
-
-urlcontent.insertOrUpdate({
-    //id: 2,
-    content: '11'
+function insert_urlcontent(content) {
+ urlcontent.insertOrUpdate({
+    content: content
   });
   
+}
+
 // urlcontent.sync({force: true}).then(() => {
 //   // Table insertOrUpdate
 //   return urlcontent.insertOrUpdate({
@@ -92,7 +115,15 @@ urlcontent.insertOrUpdate({
 //     content: '11'
 //   });
 // });
+// var list =get_urls()
+//     console.log(list);
+    
+function get_urlcontent() {
 
+  urlcontent.findAll().then(urlcontent => {
+    return  urlcontent
+  })
+}
 // urlcontent.findAll().then(urlcontent => {
 //   console.log(urlcontent)
 // })
@@ -148,3 +179,6 @@ urlcontent.insertOrUpdate({
 //     }
 //   }
 // })
+
+var list =get_urls()
+    console.log(list);
