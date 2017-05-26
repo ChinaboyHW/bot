@@ -14,40 +14,41 @@
 // });
 
 // c.queue('http://www.amazon.com'); 
- var dal=require('./DAL');
+var dal = require('./DAL');
 
-exports.addqueue= addqueue
-exports.exe_queue= exe_queue
+exports.addqueue = addqueue
+exports.exe_queue = exe_queue
 
 var Crawler = require("crawler");
 
 var c = new Crawler({
-    maxConnections : 10,
+    maxConnections: 10,
     // This will be called for each crawled page
-    callback : function (error, res, done) {
-        if(error){
+    callback: function(error, res, done) {
+        if (error) {
             console.log(error);
-        }else{
+        } else {
             var $ = res.$;
             // $ is Cheerio by default
             //a lean implementation of core jQuery designed specifically for the server
             console.log($.text());
             dal.insert_urlcontent($.text())
-        //     const bot = Wechaty.instance()
-        //     bot.on('message',  message =>  {
-        //             })
-        //             bot.message
-         }
+                //     const bot = Wechaty.instance()
+                //     bot.on('message',  message =>  {
+                //             })
+                //             bot.message
+        }
         done();
     }
 });
 
 
 function addqueue(url) {
-  setInterval(exe_queue,5000,"5sec");//上面已经将函数的setInterval方法介绍了。
+    setInterval(exe_queue, 5000, "5sec"); //上面已经将函数的setInterval方法介绍了。
 }
-function exe_queue(){
-  c.queue('http://www.baidu.com');
+
+function exe_queue() {
+    c.queue('http://www.baidu.com');
 }
 
 // Queue just one URL, with default callback

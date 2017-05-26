@@ -1,5 +1,5 @@
-var crawler=require('./crawler');
-var dal=require('./DAL');
+var crawler = require('./crawler');
+var dal = require('./DAL');
 
 // msssage ="http"
 // console.log(msssage.indexOf("http"));
@@ -9,11 +9,11 @@ var dal=require('./DAL');
 //       dal.inster_url()
 // }
 
-   var list =dal.get_urls()
-    console.log(list);
+var list = dal.get_urls()
+console.log(list);
 
-   var list =dal.get_urlcontent()
-    console.log(list);
-      
-      
-     //  crawler.exe_queue()         
+var list = dal.get_urlcontent()
+console.log(list);
+
+
+//  crawler.exe_queue()

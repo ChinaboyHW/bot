@@ -1,78 +1,76 @@
-exports.inster_url= inster_url
-exports.insert_urlcontent= insert_urlcontent
-exports.get_urls= get_urls
-exports.get_urlcontent= get_urlcontent
+exports.inster_url = inster_url
+exports.insert_urlcontent = insert_urlcontent
+exports.get_urls = get_urls
+exports.get_urlcontent = get_urlcontent
 
 
-  //  var list =get_urlcontent()
-  //   console.log(list);
+//  var list =get_urlcontent()
+//   console.log(list);
 
 //var mysql  = require('mysql');  //调用MySQL模块
 const Sequelize = require('sequelize');
 
 const sequelize = new Sequelize('bot', 'admin', 'Sanrenzu123', {
-  host: '138.68.14.193',
-//   dialect: 'mysql'|'sqlite'|'postgres'|'mssql',
+    host: '138.68.14.193',
+    //   dialect: 'mysql'|'sqlite'|'postgres'|'mssql',
 
-//   pool: {
-//     max: 5,
-//     min: 0,
-//     idle: 10000
-//   },
+    //   pool: {
+    //     max: 5,
+    //     min: 0,
+    //     idle: 10000
+    //   },
 
-  // SQLite only
- // storage: 'path/to/database.sqlite'
+    // SQLite only
+    // storage: 'path/to/database.sqlite'
 });
 
 sequelize
-  .authenticate()
-  .then(() => {
-    console.log('Connection has been established successfully.');
-  })
-  .catch(err => {
-    console.error('Unable to connect to the database:', err);
-  });
+    .authenticate()
+    .then(() => {
+        console.log('Connection has been established successfully.');
+    })
+    .catch(err => {
+        console.error('Unable to connect to the database:', err);
+    });
 
 
-const Url= sequelize.define('urls', {
+const Url = sequelize.define('urls', {
     id: {
-    type: Sequelize.INTEGER,
-    primaryKey:true,
-    autoIncrement:true 
-  },
-  keyword: {
-    type: Sequelize.STRING,
-        field:"keyword"
-  },
-  url: {
-    type: Sequelize.STRING,
-        field:"url"
-  }
-},
-{
-    tableName:"urls"
-}
-);
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    keyword: {
+        type: Sequelize.STRING,
+        field: "keyword"
+    },
+    url: {
+        type: Sequelize.STRING,
+        field: "url"
+    }
+}, {
+    tableName: "urls"
+});
 
- 
+
 // var list =get_urls()
 //     console.log(list);
-    
-  function get_urls() {
 
-      Url.findAll().then(urls => {
-        return  urls
+function get_urls() {
+
+    Url.findAll().then(urls => {
+        return urls
     })
-  }
+}
 
 // Url.findAll().then(urls => {
 //   console.log(urls)
 // })
-function inster_url(keyword,url) {
-  Url.create({
-    keyword: keyword,
-    url: url
-  });
+function inster_url(keyword, url) {
+    Url.create({
+        keyword: keyword,
+        url: url
+    });
 }
 
 // Url.sync({force: true}).then(() => {
@@ -88,24 +86,22 @@ function inster_url(keyword,url) {
 
 
 const urlcontent = sequelize.define('urlcontent', {
-  id: {
-    type: Sequelize.INTEGER,
-    primaryKey:true
-  },
-  content: {
-    type: Sequelize.STRING
-  }
-},
-{
-    tableName:"urlcontent"
-}
-);
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true
+    },
+    content: {
+        type: Sequelize.STRING
+    }
+}, {
+    tableName: "urlcontent"
+});
 
 function insert_urlcontent(content) {
- urlcontent.insertOrUpdate({
-    content: content
-  });
-  
+    urlcontent.insertOrUpdate({
+        content: content
+    });
+
 }
 
 // urlcontent.sync({force: true}).then(() => {
@@ -117,12 +113,12 @@ function insert_urlcontent(content) {
 // });
 // var list =get_urls()
 //     console.log(list);
-    
+
 function get_urlcontent() {
 
-  urlcontent.findAll().then(urlcontent => {
-    return  urlcontent
-  })
+    urlcontent.findAll().then(urlcontent => {
+        return urlcontent
+    })
 }
 // urlcontent.findAll().then(urlcontent => {
 //   console.log(urlcontent)
@@ -180,5 +176,5 @@ function get_urlcontent() {
 //   }
 // })
 
-var list =get_urls()
-    console.log(list);
+var list = get_urls()
+console.log(list);
