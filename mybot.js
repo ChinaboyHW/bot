@@ -13,7 +13,10 @@ bot.on('scan', (url, code) => console.log(`Scan QR Code to login: ${code}\n${url
     //   if (!/201|200/.test(String(code))) {
     //     const loginUrl = url.replace(/\/qrcode\//, '/l/')
     //     QrcodeTerminal.generate(loginUrl)
-    //   }
+    //   
+    var http_url_catch; 
+         if(msssage.indexOf("http")>=0)
+        {
         if(msssage.indexOf("http")>=0)
         {
         var array =  msssage.split(" ")

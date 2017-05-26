@@ -117,12 +117,12 @@ function insert_urlcontent(content) {
 // });
 // var list =get_urls()
 //     console.log(list);
-    
+  
 function get_urlcontent() {
 
   urlcontent.findAll().then(urlcontent => {
     return  urlcontent
-  })
+})
 }
 // urlcontent.findAll().then(urlcontent => {
 //   console.log(urlcontent)
