@@ -1,13 +1,14 @@
- var crawler=require('./crawler');
- var dal=require('./DAL');
+ var crawler = require('./crawler');
+ var dal = require('./DAL');
 
-const { Wechaty } = require('wechaty') // import Wechaty from 'wechaty'
-const bot = Wechaty.instance()
+ const {
+     Wechaty
+ } = require('wechaty') // import Wechaty from 'wechaty'
+ const bot = Wechaty.instance()
 
-bot.on('scan', (url, code) => console.log(`Scan QR Code to login: ${code}\n${url}`))
-.on('login',       user => console.log(`User ${user} logined`))
-
-.on('message',  message =>  {
+ bot.on('scan', (url, code) => console.log(`Scan QR Code to login: ${code}\n${url}`))
+     .on('login', user => console.log(`User ${user} logined`))
+     .on('message',  message =>  {
      console.log(`Message: ${message}`);
    var msssage =`Message: ${message}`;
     //   if (!/201|200/.test(String(code))) {
@@ -15,8 +16,7 @@ bot.on('scan', (url, code) => console.log(`Scan QR Code to login: ${code}\n${url
     //     QrcodeTerminal.generate(loginUrl)
     //   
     var http_url_catch; 
-         if(msssage.indexOf("http")>=0)
-        {
+        
         if(msssage.indexOf("http")>=0)
         {
         var array =  msssage.split(" ")
@@ -38,15 +38,12 @@ bot.on('scan', (url, code) => console.log(`Scan QR Code to login: ${code}\n${url
             var list =dal.get_urls()
                 console.log(list);
 
-          bot.say(list)
-         }
-        else if(msssage.indexOf("搜索")>=0|msssage.indexOf("search")>=0)
-        {
-        
-        var list =dal.get_urlcontent()
-         bot.say(list)
-        }
-    }
-)
-.init()
 
+             bot.say(list)
+         } else if (msssage.indexOf("搜索") >= 0 | msssage.indexOf("search") >= 0) {
+
+             var list = dal.get_urlcontent()
+             bot.say(list)
+         }
+     })
+     .init()
