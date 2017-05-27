@@ -12,7 +12,7 @@ sequelize
     .then(() => {
         console.log('Connection has been established successfully.');
         Url.sync({
-            force: true
+            force: false
         }).then(() => {
             console.log("Url table created")
         });
@@ -114,30 +114,40 @@ function insertURLContent(username, url, content) {
     });
 }
 
-function getURLContent(keywords, func) {
+function getURLContent(keywords, cb) {
+    console.log("get url content by keywords", keywords)
+    let likeAry = []
+    keywords.forEach((keyword) => {
+        likeAry.push({
+            content: {
+                $like: "%" + keyword + "%"
+            }
+        })
+    })
+    let searchCondition = {
+        where: likeAry
+    }
 
-    Project.findAll({
+    URLContent.findAll(searchCondition).then(contentlist => {
+        console.warn("found:", contentlist.length)
+        cb(contentlist)
+    }, err => {
+        console.error(err)
+    })
+}
+
+function getURLs(username, cb) {
+    console.log("get urls of ", username)
+    Url.findAll({
         where: {
-            content: [keywords]
+            username
         }
-    }).then(projects => {
-        //   // projects will be an array of Projects having the id 1, 2 or 3
-        //   // this is actually doing an IN query
-        func(contentlist)
+    }).then(urls => {
+        console.log("Found:", urls.length)
+        cb(urls)
     })
 }
 
-function getURLs(func) {
-    Url.findAll().then(urls => {
-        func(urls)
-    })
-}
-
-// function getURLContent() {
-//     URLContent.findAll().then(urlcontent => {
-//         return urlcontent
-//     })
-// }
 
 exports.insertURL = insertURL
 exports.insertURLContent = insertURLContent

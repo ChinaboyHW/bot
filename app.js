@@ -23,41 +23,78 @@ bot.on('scan', (url, code) => console.log(`Scan QR Code to login: ${code}\n${url
     .init()
 
 function onMessage(message) {
+    if (message.self()) {
+        return
+    }
+    // console.log(message.from())
     // console.log(`Message: ${message}`);
     // console.log(message)
-    const username = message.rawObj.FromUserName
+    const username = message.from().rawObj.NickName
     let parsedUrl = parseMessage(message)
     if (!parsedUrl) {
-        let waitingForKeywords = WaitingForKeywords[message.rawObj.FromUserName]
+        let waitingForKeywords = WaitingForKeywords[username]
         const content = message.rawObj.Content.trim()
         const keywords = content.split(' ')
         console.log(content)
         if (waitingForKeywords && keywords.length > 0) {
-            console.log("insert ", message.rawObj.FromUserName, waitingForKeywords.url, keywords)
-            models.insertURL(message.rawObj.FromUserName, waitingForKeywords.url, JSON.stringify(keywords))
-            delete WaitingForKeywords[message.rawObj.FromUserName]
+            message.say("关键字" + JSON.stringify(keywords) + "已收录")
 
-            crawler.addQueue(message, message.rawObj.FromUserName, message.rawObj.Url)
+            // console.log("insert ", username, waitingForKeywords.url, keywords)
+            models.insertURL(username, waitingForKeywords.url, JSON.stringify(keywords))
+            delete WaitingForKeywords[username]
+
+            crawler.addQueue(message, username, message.rawObj.Url)
         }
         return
     }
+    console.log(parsedUrl)
 
     switch (parsedUrl.type) {
         case 1:
-            models.insertURL(username, parsedUrl.url, parsedUrl.keywords)
-                // models.insertURLContent(username, parsedUrl.url)
-            crawler.addQueue(message, username, parsedUrl.url)
-            message.say("关键字" + parsedUrl.keywords + "已收录")
+            if (parsedUrl.query) {
+                models.getURLs(username, urls => {
+                    let msg = ""
+                    if (urls.length === 0) {
+                        msg = "您未关注任何网址"
+                    } else {
+                        msg = "您共关注了" + urls.length + "个网址：\n"
+                        urls.forEach(url => {
+                            msg += url.url + "\n"
+                        })
+                    }
+                    message.say(msg)
+                })
+            } else if (parsedUrl.search) {
+                models.getURLContent(parsedUrl.keywords, function(list) {
+                    let msg = ""
+                    if (list.length === 0) {
+                        msg = "没有包含该内容的网址"
+                    } else {
+                        msg = "共有" + list.length + "个网址包含您搜索的内容：\n"
+                        list.forEach(content => {
+                            msg += content.url + "\n"
+                        })
+                    }
+                    message.say(msg)
+                })
+            } else {
+
+                models.insertURL(username, parsedUrl.url, parsedUrl.keywords)
+                    // models.insertURLContent(username, parsedUrl.url)
+                crawler.addQueue(message, username, parsedUrl.url)
+                message.say("关键字" + parsedUrl.keywords + "已收录")
+            }
             break;
         case 49:
             // TODO Ask the user for keywords
 
-            WaitingForKeywords[message.rawObj.FromUserName] = {
+            WaitingForKeywords[username] = {
                     url: parsedUrl.url,
                     created: Date.now()
                 }
                 // Queue for once
-            crawler.executeQueue(message, message.rawObj.FromUserName, message.rawObj.Url)
+            crawler.executeQueue(message, username, message.rawObj.Url)
+            models.insertURL(username, parsedUrl.url, '[]')
             message.say("如需持续关注，请输入关键字(以空格分隔)")
             break;
         default:
@@ -65,33 +102,13 @@ function onMessage(message) {
             break;
     }
 
-    var msssage = `Message: ${message}`;
+    // var msssage = `Message: ${message}`;
     //   if (!/201|200/.test(String(code))) {
     //     const loginUrl = url.replace(/\/qrcode\//, '/l/')
     //     QrcodeTerminal.generate(loginUrl)
 
     // var http_url_catch;
-
-    if (msssage.indexOf("搜索") >= 0| msssage.indexOf("search") >= 0) {
-        
-        var array = msssage.split(" ")
-        if (array.length > 0) {
-            if (array[0].indexOf("搜索" >= 0)|array[0].indexOf("search" >= 0)) {
-                models.getURLContent(array[1].trim(),function(list) {
-                bot.say(list)
-                })
-            } else {
-                models.getURLContent(array[0].trim())
-            }
-        }
-        bot.say("搜索中")
-    } else if (msssage.indexOf("list") >= 0 | msssage.indexOf("查询") >= 0) {
-        models.get_urls(function(list) {
-                    console.log(list);
-                    bot.say(list)
-
-        })
-    } 
+    // console.log(message)
 }
 
 const parseMessage = message => {
@@ -117,4 +134,23 @@ const parseMessage = message => {
             keywords
         }
     }
+
+    if (msgtype === 1 && (msgcontent.indexOf('搜索') != -1 || msgcontent.indexOf('search') != -1)) {
+        var msgParts = msgcontent.split(' ')
+        msgParts.shift()
+        let keywords = msgParts
+        return {
+            type: msgtype,
+            search: true,
+            keywords
+        }
+    }
+
+    if (msgtype === 1 && (msgcontent.indexOf('查询') != -1 || msgcontent.indexOf('list') != -1)) {
+        return {
+            type: msgtype,
+            query: true
+        }
+    }
+
 }

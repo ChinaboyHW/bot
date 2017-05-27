@@ -50,7 +50,7 @@ var c = new Crawler({
 
 
 function addQueue(message, username, url) {
-    console.log("add quque", url)
+    // console.log("add quque", url)
     setInterval(() => {
         executeQueue(message, username, url)
     }, 5000);
@@ -70,6 +70,10 @@ function executeQueue(message, username, url) {
                 const text = $.text()
 
                 models.getURL(username, url, (urlRecord) => {
+                    if (!urlRecord) {
+                        console.warn("Not found url of user", username, url)
+                        return
+                    }
                     let keywords = JSON.parse(urlRecord.keywords) || []
                     let pushed_keywords = JSON.parse(urlRecord.pushed_keywords) || []
                     console.log("get keyworkds", keywords)
