@@ -16,8 +16,8 @@
 // c.queue('http://www.amazon.com'); 
 var models = require('../models');
 
-exports.addqueue = addqueue
-exports.exe_queue = exe_queue
+exports.addQueue = addQueue
+exports.executeQueue = executeQueue
 
 var Crawler = require("crawler");
 
@@ -25,14 +25,17 @@ var c = new Crawler({
     maxConnections: 10,
     // This will be called for each crawled page
     callback: function(error, res, done) {
+        console.log('crawler callback')
         if (error) {
             console.log(error);
         } else {
             var $ = res.$;
             // $ is Cheerio by default
             //a lean implementation of core jQuery designed specifically for the server
-            console.log($.text());
-            models.insertURLContent($.text())
+
+            // console.log($.text());
+            console.log(res.request.uri, res.statusCode)
+                // models.insertURLContent($.text())
                 //     const bot = Wechaty.instance()
                 //     bot.on('message',  message =>  {
                 //             })
@@ -43,12 +46,29 @@ var c = new Crawler({
 });
 
 
-function addqueue(url) {
-    setInterval(exe_queue, 5000, "5sec"); //上面已经将函数的setInterval方法介绍了。
+function addQueue(username, url) {
+    console.log("add quque", url)
+    setInterval(() => {
+        executeQueue(username, url)
+    }, 5000);
 }
 
-function exe_queue() {
-    c.queue('http://www.baidu.com');
+function executeQueue(username, url, skipDuplicates) {
+    console.log("exec queue", arguments)
+        // c.queue(url)
+    c.queue([{
+        uri: url,
+        callback: (err, res, done) => {
+            if (err) {
+                console.log('crawler err:', err)
+            } else {
+                console.log("got the crawl result for user", username)
+                var $ = res.$;
+                // models.insertURLContent(username, url, $.text())
+            }
+            done()
+        }
+    }]);
 }
 
 // Queue just one URL, with default callback

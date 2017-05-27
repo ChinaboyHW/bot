@@ -79,23 +79,32 @@ function insertURL(username, url, keywords) {
 const URLContent = sequelize.define('urlcontent', {
     id: {
         type: Sequelize.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true
     },
     content: {
+        type: Sequelize.TEXT
+    },
+    url: {
+        type: Sequelize.TEXT,
+    },
+    username: {
         type: Sequelize.STRING
     }
 }, {
     tableName: "urlcontent"
 });
 
-function insertURLContent(content) {
-    UrlContent.insertOrUpdate({
-        content: content
+function insertURLContent(username, url, content) {
+    URLContent.insertOrUpdate({
+        username,
+        url,
+        content
     });
 }
 
 function getURLContent() {
-    UrlContent.findAll().then(urlcontent => {
+    URLContent.findAll().then(urlcontent => {
         return urlcontent
     })
 }
