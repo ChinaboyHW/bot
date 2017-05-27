@@ -56,11 +56,7 @@ const Url = sequelize.define('urls', {
     tableName: "urls"
 });
 
-function getURLs() {
-    Url.findAll().then(urls => {
-        return urls
-    })
-}
+
 
 function getURL(username, url, cb) {
     Url.find({
@@ -118,11 +114,30 @@ function insertURLContent(username, url, content) {
     });
 }
 
-function getURLContent() {
-    URLContent.findAll().then(urlcontent => {
-        return urlcontent
+function getURLContent(keywords, func) {
+
+    Project.findAll({
+        where: {
+            content: [keywords]
+        }
+    }).then(projects => {
+        //   // projects will be an array of Projects having the id 1, 2 or 3
+        //   // this is actually doing an IN query
+        func(contentlist)
     })
 }
+
+function getURLs(func) {
+    Url.findAll().then(urls => {
+        func(urls)
+    })
+}
+
+// function getURLContent() {
+//     URLContent.findAll().then(urlcontent => {
+//         return urlcontent
+//     })
+// }
 
 exports.insertURL = insertURL
 exports.insertURLContent = insertURLContent
