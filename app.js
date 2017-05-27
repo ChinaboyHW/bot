@@ -23,9 +23,8 @@ bot.on('scan', (url, code) => console.log(`Scan QR Code to login: ${code}\n${url
     .init()
 
 function onMessage(message) {
-    console.log('###  onmessage')
-        // console.log(`Message: ${message}`);
-    console.log(message)
+    // console.log(`Message: ${message}`);
+    // console.log(message)
     const username = message.rawObj.FromUserName
     let parsedUrl = parseMessage(message)
     if (!parsedUrl) {
@@ -38,7 +37,7 @@ function onMessage(message) {
             models.insertURL(message.rawObj.FromUserName, waitingForKeywords.url, JSON.stringify(keywords))
             delete WaitingForKeywords[message.rawObj.FromUserName]
 
-            crawler.addQueue(message.rawObj.FromUserName, message.rawObj.Url)
+            crawler.addQueue(message, message.rawObj.FromUserName, message.rawObj.Url)
         }
         return
     }
@@ -47,7 +46,8 @@ function onMessage(message) {
         case 1:
             models.insertURL(username, parsedUrl.url, parsedUrl.keywords)
                 // models.insertURLContent(username, parsedUrl.url)
-            crawler.addQueue(username, parsedUrl.url)
+            crawler.addQueue(message, username, parsedUrl.url)
+            message.say("关键字" + parsedUrl.keywords + "已收录")
             break;
         case 49:
             // TODO Ask the user for keywords
@@ -57,7 +57,7 @@ function onMessage(message) {
                     created: Date.now()
                 }
                 // Queue for once
-            crawler.executeQueue(message.rawObj.FromUserName, message.rawObj.Url)
+            crawler.executeQueue(message, message.rawObj.FromUserName, message.rawObj.Url)
             message.say("如需持续关注，请输入关键字(以空格分隔)")
             break;
         default:
@@ -102,8 +102,8 @@ function onMessage(message) {
 const parseMessage = message => {
     let msgtype = message.type()
     let msgcontent = message.rawObj.Content.trim()
-    console.log("msgtype:", msgtype)
-    console.log("msgcontent:", msgcontent)
+        // console.log("msgtype:", msgtype)
+        // console.log("msgcontent:", msgcontent)
     if (msgtype === 49 && message.rawObj.Url) {
         console.log("app shares an url")
         return {

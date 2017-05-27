@@ -12,7 +12,7 @@ sequelize
     .then(() => {
         console.log('Connection has been established successfully.');
         Url.sync({
-            force: false
+            force: true
         }).then(() => {
             console.log("Url table created")
         });
@@ -34,7 +34,7 @@ const Url = sequelize.define('urls', {
         autoIncrement: true
     },
     keywords: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         field: "keywords"
     },
     url: {
@@ -48,6 +48,9 @@ const Url = sequelize.define('urls', {
     userid: {
         type: Sequelize.STRING,
         field: "userid"
+    },
+    pushed_keywords: {
+        type: Sequelize.TEXT
     }
 }, {
     tableName: "urls"
@@ -57,6 +60,18 @@ function getURLs() {
     Url.findAll().then(urls => {
         return urls
     })
+}
+
+function getURL(username, url, cb) {
+    Url.find({
+        where: {
+            username,
+            url
+        }
+    }).then(url => {
+        cb(url)
+    })
+
 }
 
 function insertURL(username, url, keywords) {
@@ -113,3 +128,4 @@ exports.insertURL = insertURL
 exports.insertURLContent = insertURLContent
 exports.getURLs = getURLs
 exports.getURLContent = getURLContent
+exports.getURL = getURL
