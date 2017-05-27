@@ -65,38 +65,33 @@ function onMessage(message) {
             break;
     }
 
-    // var msssage = `Message: ${message}`;
+    var msssage = `Message: ${message}`;
     //   if (!/201|200/.test(String(code))) {
     //     const loginUrl = url.replace(/\/qrcode\//, '/l/')
     //     QrcodeTerminal.generate(loginUrl)
 
     // var http_url_catch;
 
-    // if (msssage.indexOf("http") >= 0) {
-    //     return
-    //     var array = msssage.split(" ")
-    //     if (array.length > 0) {
-    //         if (array[0].indexOf("http" >= 0)) {
-    //             models.insertURL(array[0], array[1])
-    //         } else {
-    //             models.insertURL(array[1], array[0])
-    //         }
-    //
-    //     }
-    //     bot.say("网址已收录")
-    //     models.insertURL("关键字", msssage)
-    //     crawler.exe_queue()
-    // } else if (msssage.indexOf("list") >= 0 | msssage.indexOf("查询") >= 0) {
-    //     var list = models.get_urls()
-    //     console.log(list);
-    //
-    //
-    //     bot.say(list)
-    // } else if (msssage.indexOf("搜索") >= 0 | msssage.indexOf("search") >= 0) {
-    //
-    //     var list = models.get_urlcontent()
-    //     bot.say(list)
-    // }
+    if (msssage.indexOf("搜索") >= 0| msssage.indexOf("search") >= 0) {
+        
+        var array = msssage.split(" ")
+        if (array.length > 0) {
+            if (array[0].indexOf("搜索" >= 0)|array[0].indexOf("search" >= 0)) {
+                models.getURLContent(array[1].trim(),function(list) {
+                bot.say(list)
+                })
+            } else {
+                models.getURLContent(array[0].trim())
+            }
+        }
+        bot.say("搜索中")
+    } else if (msssage.indexOf("list") >= 0 | msssage.indexOf("查询") >= 0) {
+        models.get_urls(function(list) {
+                    console.log(list);
+                    bot.say(list)
+
+        })
+    } 
 }
 
 const parseMessage = message => {
