@@ -12,7 +12,7 @@
     "crawler": "^1.0.5",
     "jsdom": "^11.0.0",
     "mysql": "^2.13.0",
-    "sequelize": "^3.30.4",
-    "wechaty": "^0.8.81"
+    "sequelize": "^3.30.4"
+    // "wechaty": "^0.8.81" https://github.com/Chatie/wechaty/issues/281
   }
 }
