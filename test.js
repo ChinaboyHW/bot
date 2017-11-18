@@ -1,5 +1,5 @@
 var crawler = require('./crawler');
-var dal = require('./DAL');
+var models = require('./models');
 
 // msssage ="http"
 // console.log(msssage.indexOf("http"));
@@ -8,12 +8,13 @@ var dal = require('./DAL');
 //     // bot.say("网址已收录")
 //       dal.inster_url()
 // }
+models.insertURL("test", "waitingForKeywords.url", "JSON.stringify(keywords)")
 
-var list = dal.get_urls()
-console.log(list);
+// var list = models.get_urls()
+// console.log(list);
 
-var list = dal.get_urlcontent()
-console.log(list);
+// var list = models.get_urlcontent()
+// console.log(list);
 
 
 //  crawler.exe_queue()

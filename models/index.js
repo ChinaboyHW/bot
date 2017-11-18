@@ -67,7 +67,10 @@ function getURL(username, url, cb) {
     }).then(url => {
         cb(url)
     })
-
+    console.log(getURL);
+    
+    console.log(url);
+    
 }
 
 function insertURL(username, url, keywords) {
@@ -85,6 +88,8 @@ function insertURL(username, url, keywords) {
             url.save()
         }
     });
+    console.log("insertURL");
+    
 }
 
 const URLContent = sequelize.define('urlcontent', {
@@ -112,6 +117,8 @@ function insertURLContent(username, url, content) {
         url,
         content
     });
+    console.log("insertURLContent");
+    
 }
 
 function getURLContent(keywords, cb) {
@@ -134,6 +141,8 @@ function getURLContent(keywords, cb) {
     }, err => {
         console.error(err)
     })
+    console.log("getURLContent");
+    
 }
 
 function getURLs(username, cb) {
@@ -146,6 +155,10 @@ function getURLs(username, cb) {
         console.log("Found:", urls.length)
         cb(urls)
     })
+
+    console.log("getURLs");
+    
+    console.log(urls);
 }
 
 
