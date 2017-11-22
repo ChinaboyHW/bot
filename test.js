@@ -1,4 +1,4 @@
-var crawler = require('./crawler');
+//var crawler = require('./crawler');
 var models = require('./models');
 
 // msssage ="http"
